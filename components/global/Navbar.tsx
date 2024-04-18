@@ -6,10 +6,10 @@ import { UserIcon } from "lucide-react";
 
 export default function Component() {
   return (
-    <nav className="flex flex-row items-center h-14 px-4 border-b border-gray-200 dark:border-gray-850">
+    <nav className="flex flex-row items-center h-16 px-5 border-b border-gray-200 dark:border-gray-850">
       <div className="flex items-center gap-4 lg:gap-8">
         <Link className="flex items-center gap-2 text-sm font-medium" href="#">
-          <PackageIcon className="w-5 h-5" />
+          <PackageIcon className="w-6 h-6" />
           <span>Package</span>
         </Link>
       </div>
@@ -23,13 +23,13 @@ export default function Component() {
           />
         </div>
       </div>
-      <Button className="ml-auto" size="icon" variant="ghost">
-        <ShoppingBagIcon className="w-4 h-4" />
+      <Button className="ml-auto mx-4" size="icon" variant="ghost">
+        <ShoppingBagIcon className="w-6 h-6" />
         <span className="sr-only">View cart</span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="rounded-full border border-gray-200 w-8 h-8 dark:border-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800">
+          <button className="rounded-full border border-gray-200 w-12 h-12 dark:border-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800">
             <span className="sr-only">User Profile</span>
             <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
           </button>

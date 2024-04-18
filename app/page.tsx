@@ -17,18 +17,7 @@ export default function  Component() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {/* product card */}
             <div>
-              {session && session.user ? (
-                <button onClick={() => signOut()}>Sign out</button>
-              ) : (
-                <button onClick={() => signIn()}>Sign in</button>
-              )}
-            </div>{" "}
-            <div>
-              {session?.user?.name}
-              <br />
-              {session?.user?.image}
-              <br />
-              {session?.user?.email}
+             
             </div>
           </div>
         </div>
