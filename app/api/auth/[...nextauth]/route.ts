@@ -1,24 +1,19 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google"
+import GoogleProvider from "next-auth/providers/google";
 
-// interface googleType {
-//   clientId: string;
-//   clientSecret:string;
-// }
+
 export const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID || "",
+      clientId: process?.env?.GOOGLE_ID || "",
       clientSecret: process.env.GOOGLE_SECRET || "",
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
     }),
   ],
+  session: {
+    strategy: "jwt" as const,
+  },
 };
 
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
