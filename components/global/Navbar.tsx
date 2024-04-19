@@ -35,7 +35,9 @@ export default function Component() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" >
+          <Link href={"/user/settings"}>
           <DropdownMenuItem>Settings</DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>Logout</DropdownMenuItem>
           <DropdownMenuItem>My Orders</DropdownMenuItem>
         </DropdownMenuContent>
