@@ -4,6 +4,7 @@ import "./globals.css";
 import {ThemeProvider} from '@/components/theme-provider'
 import { Providers } from "@/lib/providers";
 import Navbar from "@/components/global/Navbar";
+import React from "react";
 
 
 

@@ -1,14 +1,18 @@
+"use client"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UserIcon } from "lucide-react";
+import { UserImage} from "@/lib/User";
+import { signIn, signOut, useSession } from "next-auth/react"
 
 export default function Component() {
+    const {data:session} = useSession();
+
   return (
     <nav className="flex flex-row items-center h-16 px-5 border-b border-gray-200 dark:border-gray-850">
       <div className="flex items-center gap-4 lg:gap-8">
-        <Link className="flex items-center gap-2 text-sm font-medium" href="#">
+        <Link className="flex items-center gap-2 text-sm font-medium" href="/">
           <PackageIcon className="w-6 h-6" />
           <span>Package</span>
         </Link>
@@ -29,17 +33,23 @@ export default function Component() {
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="rounded-full border border-gray-200 w-12 h-12 dark:border-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800">
+          <button className="rounded-full border border-gray-200 overflow-hidden object-fill w-12 h-12 dark:border-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800">
             <span className="sr-only">User Profile</span>
-            <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+            <UserImage />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" >
-          <Link href={"/user/settings"}>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuContent align="end">
+          {
+            session?.user?.email? (<>
+            <Link href={"/user/settings"}>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
           <DropdownMenuItem>My Orders</DropdownMenuItem>
+            </>) : (<>
+            <DropdownMenuItem onClick={() => signIn()}>Signin</DropdownMenuItem>
+            </>)
+          }
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>

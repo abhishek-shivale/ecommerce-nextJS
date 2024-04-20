@@ -1,26 +1,73 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-// import { UserEmail } from "@/lib/User"
-import { prisma } from "@/lib/prisma"
-import ProfilePicture from "./Profile-Picture"
-
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { UserImage } from "@/lib/User";
+import { prisma } from "@/lib/prisma";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import ProfilePicture from "./Profile-Picture";
 
 export default function Component() {
-  // if (!UserEmail) return null;
+  const [name, setname] = useState("");
+  const { data: session } = useSession();
+  const SessionEmail = session?.user?.email;
 
-  const user = {
-    avatar:
-      "https://ucarecdn.com/36e789c7-af4f-4b39-8083-aae5b6617fd9/example-image.jpg",
+  const removeProfileImage = async () => {
+    "use server"
+    if (!SessionEmail) {
+      return;
+    }
+    const response = await prisma.user.update({
+      where: {
+        email: SessionEmail,
+      },
+      data: {
+        avatar: "",
+      },
+    });
+    return response;
   };
-  const removeProfileImage = async() =>{
-  }
 
-   const uploadProfileImage = async () => {
-    
-   };
+  const uploadProfileImage = async (image: string) => {
+    'use server'
+    if (!SessionEmail) {
+      return;
+    }
+    const response = await prisma.user.update({
+      where: {
+        email: SessionEmail,
+      },
+      data: {
+        avatar: image,
+      },
+    });
+
+    return response;
+  };
+
+  const onclickHandler = async () => {
+    if (!SessionEmail) {
+      return;
+    }
+    const response = await prisma.user.update({
+      where: {
+        email: SessionEmail,
+      },
+      data: {
+        name: name,
+      },
+    });
+    return response;
+  };
 
   return (
     <div className="flex w-full justify-center">
@@ -34,59 +81,46 @@ export default function Component() {
             <Label className="font-semibold" htmlFor="name">
               Name
             </Label>
-            <Input id="name" placeholder="Enter your name" />
+            <Input
+              id="name"
+              placeholder="Enter your name"
+              onChange={(e) => {
+                setname(e.target.value);
+              }}
+            />
           </div>
           <fieldset>
             <legend className="text-sm font-medium leading-none">
               Profile Image
             </legend>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500 my-4 dark:text-gray-400">
               JPG, PNG. Max file size 10MB.
             </p>
             <div className="flex gap-5 mx-6">
               <div className="mt-5">
-                <img
-                  alt="Profile Image"
-                  className="rounded-full"
-                  height="96"
-                  src="/next.svg"
-                  style={{
-                    aspectRatio: "96/96",
-                    objectFit: "cover",
-                  }}
-                  width="96"
-                />
+                <UserImage />
               </div>
-              <div className="mx-8">
-                {/* <Button variant="outline" 
-                onClick={async()=>{
-                  await uploadIages()
-                }} 
-                >
-                  Upload
-                  <input className="sr-only" id="file" type="file" />
-                </Button> */}
-                <ProfilePicture
-                onUpload={uploadProfileImage}
-                />
+              <div className="mx-8 ">
+                <Button
+                  onClick={removeProfileImage}
+                  className="bg-gray-200 px-6 py-2 h-7 text-black hover:bg-gray-300">
+                  Remove photo
+                </Button>
+                <ProfilePicture onUpload={uploadProfileImage} />
               </div>
             </div>
           </fieldset>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label className="font-semibold" htmlFor="address">
               Address
             </Label>
             <Input id="address" placeholder="Enter your address" />
-          </div>
-          <Button className="w-full" type="submit">
+          </div> */}
+          <Button onClick={onclickHandler} className="w-full" type="submit">
             Save
           </Button>
         </CardContent>
-        <CardFooter>
-          {/* <Alert variant="default">
-            Your settings have been saved successfully.
-          </Alert> */}
-        </CardFooter>
+        <CardFooter></CardFooter>
       </Card>
     </div>
   );
