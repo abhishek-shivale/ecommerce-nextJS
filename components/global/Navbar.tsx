@@ -9,7 +9,7 @@ import { signIn, signOut, useSession } from "next-auth/react"
 export default function Component() {
     const {data:session} = useSession();
 
-  return (
+return (
     <nav className="flex flex-row items-center h-16 px-5 border-b border-gray-200 dark:border-gray-850">
       <div className="flex items-center gap-4 lg:gap-8">
         <Link className="flex items-center gap-2 text-sm font-medium" href="/">
@@ -40,14 +40,17 @@ export default function Component() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {
-            session?.user?.email? (<>
+            session?.user?.email? (
+            <>
+            <Link href={"/user/myorders"}>
+          <DropdownMenuItem>My Orders</DropdownMenuItem>
+            </Link>
             <Link href={"/user/settings"}>
             <DropdownMenuItem>Settings</DropdownMenuItem>
           </Link>
           <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
-          <DropdownMenuItem>My Orders</DropdownMenuItem>
             </>) : (<>
-            <DropdownMenuItem onClick={() => signIn()}>Signin</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signIn<any>()}>Signin</DropdownMenuItem>
             </>)
           }
         </DropdownMenuContent>

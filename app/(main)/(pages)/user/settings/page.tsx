@@ -11,64 +11,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserImage } from "@/lib/User";
-import { prisma } from "@/lib/prisma";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
-import ProfilePicture from "./Profile-Picture";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import UploadCareButton from "./Uploadcare";
+import { onclickHandler, removeProfileImage, uploadProfileImage } from "./_actions/action";
 
 export default function Component() {
   const [name, setname] = useState("");
-  const { data: session } = useSession();
-  const SessionEmail = session?.user?.email;
-
-  const removeProfileImage = async () => {
-    "use server"
-    if (!SessionEmail) {
-      return;
-    }
-    const response = await prisma.user.update({
-      where: {
-        email: SessionEmail,
-      },
-      data: {
-        avatar: "",
-      },
-    });
-    return response;
-  };
-
-  const uploadProfileImage = async (image: string) => {
-    'use server'
-    if (!SessionEmail) {
-      return;
-    }
-    const response = await prisma.user.update({
-      where: {
-        email: SessionEmail,
-      },
-      data: {
-        avatar: image,
-      },
-    });
-
-    return response;
-  };
-
-  const onclickHandler = async () => {
-    if (!SessionEmail) {
-      return;
-    }
-    const response = await prisma.user.update({
-      where: {
-        email: SessionEmail,
-      },
-      data: {
-        name: name,
-      },
-    });
-    return response;
-  };
-
+  const router = useRouter()
+ 
+  useEffect(()=>{
+    router.refresh()
+  },[uploadProfileImage, removeProfileImage])
+  
   return (
     <div className="flex w-full justify-center">
       <Card className="w-full max-w-2xl p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -106,17 +61,18 @@ export default function Component() {
                   className="bg-gray-200 px-6 py-2 h-7 text-black hover:bg-gray-300">
                   Remove photo
                 </Button>
-                <ProfilePicture onUpload={uploadProfileImage} />
+                <div className="flex flex-col my-6">
+                <UploadCareButton onUpload={uploadProfileImage} />
+                </div>
               </div>
             </div>
           </fieldset>
-          {/* <div className="space-y-2">
-            <Label className="font-semibold" htmlFor="address">
-              Address
-            </Label>
-            <Input id="address" placeholder="Enter your address" />
-          </div> */}
-          <Button onClick={onclickHandler} className="w-full" type="submit">
+          <Button
+            onClick={() => {
+              onclickHandler(name);
+            }}
+            className="w-full"
+            type="submit">
             Save
           </Button>
         </CardContent>
