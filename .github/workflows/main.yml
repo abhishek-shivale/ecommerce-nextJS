@@ -1,0 +1,20 @@
+name: Ecommerce next
+
+on: push
+
+jobs: 
+  builds: 
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+        with:
+          persist-credentials: false
+      - uses: actions/cache@main
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('package*.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+      - run: npm install
+      - run: npm run build
