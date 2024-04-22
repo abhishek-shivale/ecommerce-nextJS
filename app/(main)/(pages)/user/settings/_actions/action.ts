@@ -1,4 +1,4 @@
-import "server-only"
+// import "server-only"
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth"
 //import { revalidatePath } from "next/cache";

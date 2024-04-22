@@ -1,11 +1,5 @@
 "use client"
-import Navbar from "@/components/global/Navbar";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { signOut, signIn, useSession } from "next-auth/react";
 export default function  Component() {
-    const { data: session } = useSession();
 
 
   return (

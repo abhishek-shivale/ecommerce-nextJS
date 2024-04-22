@@ -1,62 +1,68 @@
 "use client"
-import Link from "next/link"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { SheetDemo } from "@/app/(main)/(pages)/user/(cart)/Myorders";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UserImage} from "@/lib/User";
-import { signIn, signOut, useSession } from "next-auth/react"
+import { Input } from "@/components/ui/input";
+import { UserImage } from "@/lib/User";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { ModeToggle } from "./mode-toggle";
 
 export default function Component() {
     const {data:session} = useSession();
 
 return (
-    <nav className="flex flex-row items-center h-16 px-5 border-b border-gray-200 dark:border-gray-850">
-      <div className="flex items-center gap-4 lg:gap-8">
-        <Link className="flex items-center gap-2 text-sm font-medium" href="/">
-          <PackageIcon className="w-6 h-6" />
-          <span>Package</span>
-        </Link>
+  <nav className="flex flex-row items-center h-16 px-5 border-b border-gray-200 dark:border-gray-850">
+    <div className="flex items-center gap-4 lg:gap-8">
+      <Link className="flex items-center gap-2 text-sm font-medium" href="/">
+        <PackageIcon className="w-6 h-6" />
+        <span>Package</span>
+      </Link>
+    </div>
+    <div className="flex-1 min-w-0 justify-center flex items-center gap-4 lg:gap-8">
+      <div className="relative w-full max-w-md lg:max-w-xs">
+        <SearchIcon className="absolute left-3 h-4 w-4 top-2/4 transform -translate-y-2/4 text-gray-500 dark:text-gray-400" />
+        <Input
+          className="w-full pl-10 border-0 box-shadow-none appearance-none bg-white text-gray-900/60 dark:bg-gray-950/60 dark:text-white"
+          placeholder="Search"
+          type="search"
+        />
       </div>
-      <div className="flex-1 min-w-0 justify-center flex items-center gap-4 lg:gap-8">
-        <div className="relative w-full max-w-md lg:max-w-xs">
-          <SearchIcon className="absolute left-3 h-4 w-4 top-2/4 transform -translate-y-2/4 text-gray-500 dark:text-gray-400" />
-          <Input
-            className="w-full pl-10 border-0 box-shadow-none appearance-none bg-white text-gray-900/60 dark:bg-gray-950/60 dark:text-gray-950/60"
-            placeholder="Search"
-            type="search"
-          />
-        </div>
-      </div>
-      <Button className="ml-auto mx-4" size="icon" variant="ghost">
-        <ShoppingBagIcon className="w-6 h-6" />
-        <span className="sr-only">View cart</span>
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className="rounded-full border border-gray-200 overflow-hidden object-fill w-12 h-12 dark:border-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800">
-            <span className="sr-only">User Profile</span>
-            <UserImage />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {
-            session?.user?.email? (
-            <>
+    </div>
+    <SheetDemo />
+    <div className="mx-3">
+      <ModeToggle />
+    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="rounded-full border border-gray-200 overflow-hidden object-fill w-12 h-12 dark:border-gray-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800">
+          <span className="sr-only">User Profile</span>
+          <UserImage />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {session?.user?.email ? (
+          <>
             <Link href={"/user/myorders"}>
-          <DropdownMenuItem>My Orders</DropdownMenuItem>
+              <DropdownMenuItem>My Orders</DropdownMenuItem>
             </Link>
             <Link href={"/user/settings"}>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-          </Link>
-          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
-            </>) : (<>
-            <DropdownMenuItem onClick={() => signIn<any>()}>Signin</DropdownMenuItem>
-            </>)
-          }
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </nav>
-  );
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem onClick={() => signOut()}>
+              Logout
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem onClick={() => signIn<any>()}>
+              Signin
+            </DropdownMenuItem>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </nav>
+);
 }
 
 function PackageIcon(props:any) {
